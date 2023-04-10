@@ -1,10 +1,8 @@
-const http= require('http');
-const fs=require('fs');
-const routes=require('./routes')
+const http=require('http');
+const server=http.createServer((req,res)=>{
 
-const server= http.createServer(routes);
+console.log(req);
 
+});
 server.listen(3000);
-
-
 
