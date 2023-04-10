@@ -1,0 +1,19 @@
+{
+  "name": "learning-node",
+  "version": "1.0.0",
+  "description": "Learning-node",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shekhar389/Learning-NodeJs.git"
+  },
+  "author": "Shekhar Kumar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shekhar389/Learning-NodeJs/issues"
+  },
+  "homepage": "https://github.com/Shekhar389/Learning-NodeJs#readme"
+}
