@@ -6,7 +6,7 @@ const shopRoutes=require('./routes/shop');
 const path=require('path');
 const expressHbs=require('express-handlebars');
 const rootDir=require('./util/path');
-app.engine('hbs',expressHbs())
+app.engine('hbs',expressHbs({layoutsDir: 'views/layouts',defaultLayout:'main-layout'}))
 app.set('view engine','hbs');
 app.set('views','views');
 
