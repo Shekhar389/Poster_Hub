@@ -4,10 +4,8 @@ const bodyParser=require('body-parser');
 const adminData=require('./routes/admin');
 const shopRoutes=require('./routes/shop');
 const path=require('path');
-const expressHbs=require('express-handlebars');
 const rootDir=require('./util/path');
-app.engine('hbs',expressHbs({layoutsDir: 'views/layouts',defaultLayout:'main-layout'}))
-app.set('view engine','hbs');
+app.set('view engine','ejs');
 app.set('views','views');
 
 app.use(bodyParser.urlencoded({extended:false}));//Body Parser
