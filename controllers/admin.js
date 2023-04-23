@@ -39,6 +39,11 @@ const updatedProduct=new Product(prodId,updatedTitle,updatedImage,updatedDiscrip
 updatedProduct.save();
 res.redirect('/admin/products');
 }
+exports.postDeleteProduct=(req,res,next)=>{
+        const prodId=req.body.productId;
+        Product.delete(prodId);
+        res.redirect('/admin/products');
+}
 exports.getAddProduct=(req, res, next)=>{
     res.render('admin/edit-product',{ 
         pageTitle:"Add-Product",
