@@ -35,10 +35,19 @@ exports.getProducts=(req, res, next)=>{
    };
 
    exports.getCart=(req,res,next)=>{
-    res.render('shop/cart',{
-        path :'/cart',
-        pageTitle: 'Your Cart',
-    });
+    Cart.getCart(cart=>{
+
+        Product.fetchAll(products=>{
+            for(product of products){
+                if(cart.prod)
+            }
+        })
+        res.render('shop/cart',{
+            path :'/cart',
+            pageTitle: 'Your Cart',
+        });
+    })
+    
    }
    exports.postCart=(req,res,next)=>{
         const prodId=req.body.productId;

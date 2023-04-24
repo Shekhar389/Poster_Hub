@@ -1,5 +1,6 @@
 const fs=require('fs');
 const path=require('path');
+const { fileURLToPath } = require('url');
 const p=path.join(path.dirname(require.main.filename),'data','cart.json');
 module.exports=class Cart{
     
@@ -47,5 +48,16 @@ module.exports=class Cart{
                 console.log(err);});       
         })
 
+    }
+
+    static getCart(cb){
+        const cart=fs.readFile(p,(err,fileContent)=>{
+            if(err){
+                cb(null)
+            }
+            else{
+                cb(cart);
+            }
+        })
     }
 }//Project Future Planned
