@@ -6,8 +6,17 @@ const shopRoutes=require('./routes/shop');
 const path=require('path');
 const rootDir=require('./util/path');
 const errorController=require('./controllers/404');
+const db=require('./util/databse');
 app.set('view engine','ejs');
 app.set('views','views');
+
+db.execute("SELECT * FROM products")
+.then(result=>{
+    console.log(result);
+})
+.catch(err=>{
+    console.log(err);
+})
 
 app.use(bodyParser.urlencoded({extended:false}));//Body Parser
 app.use(express.static(path.join(rootDir,'public')));
