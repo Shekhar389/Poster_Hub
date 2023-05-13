@@ -5,9 +5,11 @@ exports.postAddProduct=(req, res, next)=>{
     const price=req.body.price;
     const discription=req.body.discription;
 
-    const product =new Product(null,title,imageUrl,discription,price);
-    product.save();
-    res.redirect('/');
+    const product =new Product(null,title,price,discription,imageUrl);
+    product.save().then(()=>{
+        res.redirect('/');
+    }).catch();
+    
 };
 exports.getEditProduct=(req, res, next)=>{
     const editMode=req.query.edit;
