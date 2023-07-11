@@ -1,11 +1,10 @@
-
 const Product=require('../models/product')
 exports.postAddProduct=(req, res, next)=>{
     const title=req.body.title;
     const imageUrl=req.body.imageUrl;
     const price=req.body.price;
     const description=req.body.discription;
-    const product =new Product({title:title,price:price,description:description,imageUrl:imageUrl,userId:req.user});
+    const product =new Product({title:title,price:price,description:description,imageUrl:imageUrl,userId:req.session.user});
     product.save().then(result=>{
         res.redirect('/admin/products')
         console.log(result);
@@ -28,7 +27,8 @@ exports.getEditProduct=(req, res, next)=>{
             pageTitle:"Add-Product",
             editing: editMode,
             path: '/admin/edit-product',
-            product : product
+            product : product,
+            isAuthenticated:req.session.isLoggedin
         });
     })
     
@@ -65,6 +65,7 @@ exports.getAddProduct=(req, res, next)=>{
          pageTitle:"Add-Product",
          path: '/admin/add-product',
          editing:false,
+         isAuthenticated:req.session.isLoggedin
      });
  };
 exports.getProduct=(req, res, next)=>{
@@ -77,4 +78,5 @@ exports.getProduct=(req, res, next)=>{
             prods:products,
             path :'/admin/products',
             pageTitle:'Admin Products',
+            isAuthenticated:req.session.isLoggedin
         })})};
