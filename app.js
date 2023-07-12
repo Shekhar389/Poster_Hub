@@ -17,6 +17,8 @@ const store=MongoDBStore({
     uri:MONGODB_URI,
     collection:'sessions',
 });
+
+
 app.set('view engine','ejs');
 app.set('views','views');
 
@@ -24,7 +26,16 @@ app.use(bodyParser.urlencoded({extended:false}));//Body Parser
 app.use(express.static(path.join(rootDir,'public')));
 app.use(session({secret:'my secret',resave: false,saveUninitialized:false,store:store} ));
 
-
+app.use((req,res,next)=>{
+    if(!req.session.user){
+       return next();
+    }
+    User.findById(req.session.user._id).then(user=>{
+        //console.log(user);
+        req.user=user;
+        next();
+        })
+})
 app.use('/admin',adminRoutes.routes);
 app.use(shopRoutes);
 app.use(authRoutes);

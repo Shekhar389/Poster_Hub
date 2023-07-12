@@ -16,7 +16,10 @@ exports.postLogin=(req,res,next)=>{
       //console.log(user);
       req.session.isLoggedin=true;
       req.session.user= user;
-      res.redirect('/');
+      req.session.save((err)=>{  //save method will only execute when session will create
+        res.redirect('/');
+      })
+      
       })
     
 }
