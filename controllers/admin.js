@@ -3,7 +3,7 @@ exports.postAddProduct=(req, res, next)=>{
     const title=req.body.title;
     const imageUrl=req.body.imageUrl;
     const price=req.body.price;
-    const description=req.body.discription;
+    const description=req.body.description;
     const product =new Product({title:title,price:price,description:description,imageUrl:imageUrl,userId:req.user});
     product.save().then(result=>{
         res.redirect('/admin/products')
@@ -41,21 +41,25 @@ const updatedImage=req.body.imageUrl;
 const updatedDiscription=req.body.discription;
 
 Product.findById(prodId).then(product=>{
+    if(product.userId.toString()!==req.user._id.toString()){
+        return res.redirect('/');
+    }
     product.title=updatedTitle;
     product.price=updatedPrice;
     product.description=updatedDiscription;
     product.imageUrl=updatedImage;
     return product.save()
+    .then(result=>{
+        console.log("Product Updated Successfully")
+        res.redirect('/admin/products')})
 })
-.then(result=>{
-    console.log("Product Updated Successfully")
-    res.redirect('/admin/products')})
+
     .catch(err=>{console.log(err)});
 
 }
 exports.postDeleteProduct=(req,res,next)=>{
         const prodId=req.body.productId;
-        Product.findByIdAndRemove(prodId)
+        Product.deleteOne({_id:prodId,userId:req.user._id})
         .then(()=>{
             console.log("Deleted")
         }).catch();
@@ -69,7 +73,7 @@ exports.getAddProduct=(req, res, next)=>{
      });
  };
 exports.getProduct=(req, res, next)=>{
-    Product.find()
+    Product.find({userId:req.user._id})
     // .select('title')
     // .populate('userId')
     .then(products=>{
