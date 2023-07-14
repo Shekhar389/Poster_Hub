@@ -13,6 +13,7 @@ const mongoose=require('mongoose');
 const MongoDBStore=require('connect-mongodb-session')(session)
 const csrf=require('csurf')
 const flash=require('connect-flash')
+const multer=require('multer')
 const MONGODB_URI='mongodb+srv://kshekhar2807:mKMIOJ2RI6Q6gawO@cluster0.gcxkevb.mongodb.net/shop';
 const store=MongoDBStore({
 
@@ -21,11 +22,29 @@ const store=MongoDBStore({
 });
 
 const csrfProtection=csrf();
+const filestorage= multer.diskStorage({
+    destination:(req,file,cb)=>{
+        cb(null,"images")
+    },
+    filename:(req,file,cb)=>{
+        cb(null,new Date().toISOString+'-'+file.originalname);
+    }
+})
+
+const fileFilter=(req,file,cb)=>{
+    if(file.mimetype==='image/png'||file.mimetype==='image/jpg'||file.mimetype==='image/jpeg'){
+        cb(null,true);
+    }
+    else{
+    cb(null,false);
+    }
+}
 app.use(flash());
 app.set('view engine','ejs');
 app.set('views','views');
 
 app.use(bodyParser.urlencoded({extended:false}));//Body Parser
+app.use(multer({storage:filestorage,fileFilter:fileFilter}).single('image'))
 app.use(express.static(path.join(rootDir,'public')));
 app.use(session({secret:'my secret',resave: false,saveUninitialized:false,store:store} ));
 app.use(csrfProtection)
@@ -38,6 +57,7 @@ app.use((req,res,next)=>{
         req.user=user;
         next();
         })
+        .catch((err)=>{throw new Error(err)})
 })
 
 app.use((req,res,next)=>{

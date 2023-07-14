@@ -1,14 +1,18 @@
 const Product=require('../models/product')
 exports.postAddProduct=(req, res, next)=>{
     const title=req.body.title;
-    const imageUrl=req.body.imageUrl;
+    const image=req.file;
     const price=req.body.price;
     const description=req.body.description;
+    if(!image){
+        return res.render('404');
+    }
+    const imageUrl=image.path;
     const product =new Product({title:title,price:price,description:description,imageUrl:imageUrl,userId:req.user});
     product.save().then(result=>{
         res.redirect('/admin/products')
         console.log(result);
-    }).catch(err=>{console.log(err);})
+    }).catch(err=>{console.log(err)})
     
 };
 exports.getEditProduct=(req, res, next)=>{
@@ -37,7 +41,7 @@ exports.postEditProduct=(req,res,next)=>{
 const prodId=req.body.productId;
 const updatedTitle=req.body.title;
 const updatedPrice=req.body.price;
-const updatedImage=req.body.imageUrl;
+const image=req.file;
 const updatedDiscription=req.body.discription;
 
 Product.findById(prodId).then(product=>{
