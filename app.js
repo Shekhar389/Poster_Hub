@@ -1,3 +1,8 @@
+
+
+
+
+
 const express=require('express');
 const app=express();
 const bodyParser=require('body-parser');
@@ -22,14 +27,14 @@ const store=MongoDBStore({
 });
 
 const csrfProtection=csrf();
-const filestorage= multer.diskStorage({
-    destination:(req,file,cb)=>{
-        cb(null,"images")
+const fileStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'images');
     },
-    filename:(req,file,cb)=>{
-        cb(null,new Date().toISOString+'-'+file.originalname);
+    filename: (req, file, cb) => {
+      cb(null, file.originalname);
     }
-})
+  });
 
 const fileFilter=(req,file,cb)=>{
     if(file.mimetype==='image/png'||file.mimetype==='image/jpg'||file.mimetype==='image/jpeg'){
@@ -44,8 +49,9 @@ app.set('view engine','ejs');
 app.set('views','views');
 
 app.use(bodyParser.urlencoded({extended:false}));//Body Parser
-app.use(multer({storage:filestorage,fileFilter:fileFilter}).single('image'))
+app.use(multer({storage:fileStorage,fileFilter:fileFilter}).single('image'))
 app.use(express.static(path.join(rootDir,'public')));
+app.use('/images',express.static(path.join(rootDir,'images')));
 app.use(session({secret:'my secret',resave: false,saveUninitialized:false,store:store} ));
 app.use(csrfProtection)
 app.use((req,res,next)=>{

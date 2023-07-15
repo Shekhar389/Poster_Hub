@@ -1,4 +1,5 @@
 const Product=require('../models/product')
+const fileHelper=require('../util/file')
 exports.postAddProduct=(req, res, next)=>{
     const title=req.body.title;
     const image=req.file;
@@ -42,16 +43,23 @@ const prodId=req.body.productId;
 const updatedTitle=req.body.title;
 const updatedPrice=req.body.price;
 const image=req.file;
-const updatedDiscription=req.body.discription;
+const updatedDiscription=req.body.description;
+
+
 
 Product.findById(prodId).then(product=>{
     if(product.userId.toString()!==req.user._id.toString()){
         return res.redirect('/');
     }
+    console.log("I am here")
     product.title=updatedTitle;
     product.price=updatedPrice;
     product.description=updatedDiscription;
-    product.imageUrl=updatedImage;
+    if(image){
+        fileHelper.deleteFile(product.imageUrl)
+        product.imageUrl=image.path;
+    }
+    console.log("I am here 2")
     return product.save()
     .then(result=>{
         console.log("Product Updated Successfully")
@@ -63,9 +71,16 @@ Product.findById(prodId).then(product=>{
 }
 exports.postDeleteProduct=(req,res,next)=>{
         const prodId=req.body.productId;
+        Product.findById(prodId).then(product=>{
+            if(product){
+                fileHelper.deleteFile(product.imageUrl)
+            }
+        })
+        
         Product.deleteOne({_id:prodId,userId:req.user._id})
         .then(()=>{
             console.log("Deleted")
+            res.redirect('/admin/products')
         }).catch();
 }
 exports.getAddProduct=(req, res, next)=>{
