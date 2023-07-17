@@ -3,8 +3,8 @@ const Order=require('../models/order');
 const fs=require('fs')
 const path=require('path')
 const PDFDocument=require('pdfkit')
-const stripe=require('stripe')('sk_test_51NU6M8SGc2BOiEgPKNxak3OdxomcTekGMsvTQyPKFSPQo5kFObtxhifxUUIT3cO3HHoRxFEtQ7os1CR3i8DuuIFx006DQam3Bo')
-const ITEMS_PER_PAGE = 2;
+// const stripe=require('stripe')('sk_test_51NU6M8SGc2BOiEgPKNxak3OdxomcTekGMsvTQyPKFSPQo5kFObtxhifxUUIT3cO3HHoRxFEtQ7os1CR3i8DuuIFx006DQam3Bo')
+const ITEMS_PER_PAGE = 4;
 // const Order= require('../models/order')
 exports.getProducts=(req, res, next)=>{
   const page = +req.query.page || 1;

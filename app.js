@@ -19,7 +19,7 @@ const MongoDBStore=require('connect-mongodb-session')(session)
 const csrf=require('csurf')
 const flash=require('connect-flash')
 const multer=require('multer')
-const MONGODB_URI='mongodb+srv://kshekhar2807:mKMIOJ2RI6Q6gawO@cluster0.gcxkevb.mongodb.net/shop';
+const MONGODB_URI='';
 const store=MongoDBStore({
 
     uri:MONGODB_URI,
@@ -76,7 +76,7 @@ app.use(shopRoutes);
 app.use(authRoutes);
 
 app.use('/',errorController.getError);
-mongoose.connect('mongodb+srv://kshekhar2807:mKMIOJ2RI6Q6gawO@cluster0.gcxkevb.mongodb.net/shop?retryWrites=true&w=majority')
+mongoose.connect(MONGODB_URI)
 .then(result=>{
     app.listen(3000);
 })
