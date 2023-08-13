@@ -6,7 +6,7 @@ const sendgridTransport=require('nodemailer-sendgrid-transport');
 const User = require('../models/user');
 const transporter=nodemailer.createTransport(sendgridTransport({
   auth:{
-    api_key :"API of Send Grid"
+    api_key: process.env.SENDGRID
   }
 }));
 exports.getLogin = (req, res, next) => {
@@ -117,7 +117,7 @@ exports.postSignup = (req, res, next) => {
           return transporter.sendMail({
             to:email,
             from:"hungrygrabo@gmail.com",
-            subject:'Signup Succeded',
+            subject:'Signup Succeeded',
             html:'<h1>You Successfully Signed Up! <h1>'
           })
           
@@ -222,7 +222,7 @@ exports.postNewPassword=(req,res,next)=>{
   const userId=req.body.userId;
   const passwordToken=req.body.passwordToken;
   let resetUser;
-  console.log(userId)
+  // console.log(userId)
   User.findOne({resetToken:passwordToken,resetTokenExpiration:{$gt : Date.now()},
   _id:userId})
   .then(user=>{
@@ -240,7 +240,7 @@ exports.postNewPassword=(req,res,next)=>{
     return transporter.sendMail({
       to:resetUser.email,
       from:"hungrygrabo@gmail.com",
-      subject:'Signup Succeded',
+      subject:'Signup Succeeded',
       html:'<h1>Password Changed<h1>'
     })
     

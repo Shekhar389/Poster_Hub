@@ -1,7 +1,7 @@
 
 
 
-
+require("dotenv").config();
 
 const express=require('express');
 const app=express();
@@ -19,7 +19,7 @@ const MongoDBStore=require('connect-mongodb-session')(session)
 const csrf=require('csurf')
 const flash=require('connect-flash')
 const multer=require('multer')
-const MONGODB_URI='';
+const MONGODB_URI=process.env.MONGO_DB;
 const store=MongoDBStore({
 
     uri:MONGODB_URI,
@@ -59,7 +59,6 @@ app.use((req,res,next)=>{
        return next();
     }
     User.findById(req.session.user._id).then(user=>{
-        //console.log(user);
         req.user=user;
         next();
         })
@@ -78,11 +77,8 @@ app.use(authRoutes);
 app.use('/',errorController.getError);
 mongoose.connect(MONGODB_URI)
 .then(result=>{
-    app.listen(3000);
+    app.listen(process.env.PORT || 8001);
 })
 .catch(err=>{
     console.log(err);
 })
-
-
-//Section 5 Completed

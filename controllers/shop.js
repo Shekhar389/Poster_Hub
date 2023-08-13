@@ -3,7 +3,7 @@ const Order=require('../models/order');
 const fs=require('fs')
 const path=require('path')
 const PDFDocument=require('pdfkit')
-// const stripe=require('stripe')('sk_test_51NU6M8SGc2BOiEgPKNxak3OdxomcTekGMsvTQyPKFSPQo5kFObtxhifxUUIT3cO3HHoRxFEtQ7os1CR3i8DuuIFx006DQam3Bo')
+const stripe=require('stripe')(process.env.STRIPE)
 const ITEMS_PER_PAGE = 4;
 // const Order= require('../models/order')
 exports.getProducts=(req, res, next)=>{
@@ -42,7 +42,7 @@ exports.getProducts=(req, res, next)=>{
     const prodId=req.params.productId;
     console.log("Reached")
     Product.findById(prodId).then(product=>{
-      console.log(product);
+      // console.log(product);
       res.render('shop/product-detail',{product: product,
       pageTitle:product.title,
       path:'/product'
@@ -86,7 +86,7 @@ exports.getProducts=(req, res, next)=>{
    
    req.user.populate('cart.item.productId')
   .then(user=>{
-      console.log(user.cart.item);
+      // console.log(user.cart.item);
       const products=user.cart.item;
       res.render('shop/cart', {
               path: '/cart',
@@ -104,7 +104,7 @@ exports.getProducts=(req, res, next)=>{
     .then(product=>{
       return req.user.addToCart(product);
     }).then(result=>{
-      console.log(result);
+      // console.log(result);
       res.redirect('/cart')
     })
   }
@@ -119,10 +119,10 @@ exports.getProducts=(req, res, next)=>{
   exports.getCheckout = async (req, res, next) => {
     let products;
     let total=0;
-    console.log(req.user)
+    // console.log(req.user)
     const user= await xyz(req)
-    console.log("This is User")
-    console.log(user)
+    // console.log("This is User")
+    // console.log(user)
     products=user.cart.item;
     products.forEach(p => {
             total += p.quantity * p.productId.price;
@@ -137,8 +137,8 @@ exports.getProducts=(req, res, next)=>{
     //     products.forEach(p => {
     //       total += p.quantity * p.productId.price;
     //     })
-        console.log("This is Product")
-        console.log(products)
+    //     console.log("This is Product")
+    //     console.log(products)
       //   const session = await stripe.checkout.sessions.create({
       //   line_items: [{
       //     // name: products[0].productId.title,
@@ -181,7 +181,7 @@ exports.getProducts=(req, res, next)=>{
         success_url: req.protocol + '://' + req.get('host') + '/checkout-success', // => http://localhost:3000
           cancel_url: req.protocol + '://' + req.get('host') + '/checkout-cancel'
       })
-        console.log("This is session "+session.id)
+        // console.log("This is session "+session.id)
         res.render('shop/checkout', {
           path: '/checkout',
           pageTitle: 'Checkout',
@@ -193,7 +193,6 @@ exports.getProducts=(req, res, next)=>{
   exports.postOrder = (req, res, next) => {
     req.user.populate('cart.item.productId')
     .then(user=>{
-    console.log(user.cart.item);
     const products=user.cart.item.map(i=>{
     return {quantity : i.quantity, product :{...i.productId._doc}}
     });
@@ -223,8 +222,8 @@ exports.getProducts=(req, res, next)=>{
         orders: orders,
         isAuthenticated:req.session.isLoggedin
       });
-      console.log("Order Object")
-      console.log(orders);
+      // console.log("Order Object")
+      // console.log(orders);
     })
     .catch(err => console.log(err));
 };
